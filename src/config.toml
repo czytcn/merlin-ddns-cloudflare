@@ -1,0 +1,8 @@
+[api]
+api_token = "xxxxx"
+email = "yyyy"
+domain = "zzzzz.com"
+sub_domain = "test.zzzzz.com"
+
+[app]
+get_ip_from_url= "https://api-ipv4.ip.sb/ip"
