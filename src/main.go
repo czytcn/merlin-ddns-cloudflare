@@ -20,21 +20,21 @@ func main() {
 	// Construct a new API object
 	api, err := cloudflare.New(config.O.Api.ApiToken, config.O.Api.Email)
 	if err != nil {
-		NotifyDDnsState(false)
+		NotifyDdnsState(false)
 		log.Fatal(err)
 		return
 	}
 
 	zoneID, err := api.ZoneIDByName(config.O.Api.Domain)
 	if err != nil {
-		NotifyDDnsState(false)
+		NotifyDdnsState(false)
 		log.Fatal(err)
 		return
 	}
 	// Fetch all records for a zone
 	recs, err := api.DNSRecords(zoneID, cloudflare.DNSRecord{Name: config.O.Api.SubDomain, Type: "A"})
 	if err != nil {
-		NotifyDDnsState(false)
+		NotifyDdnsState(false)
 		log.Fatal(err)
 		return
 	}
@@ -43,14 +43,14 @@ func main() {
 	client.Timeout = 100 * time.Second
 	get, errGetIp := client.Get(config.O.App.GetIpFromUrl)
 	if errGetIp != nil {
-		NotifyDDnsState(false)
+		NotifyDdnsState(false)
 		fmt.Println(errGetIp)
 		return
 	}
 	all, errParseIp := ioutil.ReadAll(get.Body)
 	if errParseIp != nil {
 		fmt.Println(errParseIp.Error())
-		NotifyDDnsState(false)
+		NotifyDdnsState(false)
 		return
 	}
 	defer get.Body.Close()
@@ -59,16 +59,16 @@ func main() {
 		fmt.Println(r.Name)
 		err := api.UpdateDNSRecord(zoneID, r.ID, cloudflare.DNSRecord{Content: ip, Type: "A"})
 		if err != nil {
-			NotifyDDnsState(false)
+			NotifyDdnsState(false)
 			fmt.Println(err.Error())
 			return
 		}
 	}
 
-	NotifyDDnsState(true)
+	NotifyDdnsState(true)
 }
 
-func NotifyDDnsState(success bool) {
+func NotifyDdnsState(success bool) {
 	if success {
 		exec.Command("/sbin/ddns_custom_updated", "1")
 	} else {
