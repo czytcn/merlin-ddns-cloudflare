@@ -38,29 +38,23 @@ func main() {
 		log.Fatal(err)
 		return
 	}
-
-	var client http.Client
-	client.Timeout = 100 * time.Second
-	get, errGetIp := client.Get(config.O.App.GetIpFromUrl)
-	if errGetIp != nil {
-		NotifyDdnsState(false)
-		fmt.Println(errGetIp)
-		return
+	f := func() (interface{}, error) {
+		return getIp(config.O.App.GetIpFromUrl)
 	}
-	all, errParseIp := ioutil.ReadAll(get.Body)
-	if errParseIp != nil {
-		fmt.Println(errParseIp.Error())
+	result, err := retry(f, 4)
+	if err != nil {
 		NotifyDdnsState(false)
 		return
 	}
-	defer get.Body.Close()
-	ip := string(all)
-	for _, r := range recs {
-		err := api.UpdateDNSRecord(zoneID, r.ID, cloudflare.DNSRecord{Content: ip, Type: "A"})
-		if err != nil {
-			NotifyDdnsState(false)
-			fmt.Println(err.Error())
-			return
+	ip, ok := result.(string)
+	if ok {
+		for _, r := range recs {
+			err := api.UpdateDNSRecord(zoneID, r.ID, cloudflare.DNSRecord{Content: ip, Type: "A"})
+			if err != nil {
+				NotifyDdnsState(false)
+				fmt.Println(err.Error())
+				return
+			}
 		}
 	}
 
@@ -75,4 +69,35 @@ func NotifyDdnsState(success bool) {
 		exec.Command("/sbin/ddns_custom_updated", "0")
 		fmt.Println("update record failed.")
 	}
+}
+
+func getIp(echoUrl string) (interface{}, error) {
+	var client http.Client
+	client.Timeout = 100 * time.Second
+	get, errGetIp := client.Get(echoUrl)
+	if errGetIp != nil {
+		return "", errGetIp
+	}
+	all, errParseIp := ioutil.ReadAll(get.Body)
+	defer func() {
+		_ = get.Body.Close()
+	}()
+	if errParseIp != nil {
+		return "", errParseIp
+	}
+
+	ip := string(all)
+	return ip, nil
+}
+
+func retry(f func() (interface{}, error), retryTimes int) (interface{}, error) {
+	if result, err := f(); err != nil {
+		if retryTimes > 0 {
+			return retry(f, retryTimes-1)
+		}
+		return result, err
+	} else {
+		return result, nil
+	}
+
 }

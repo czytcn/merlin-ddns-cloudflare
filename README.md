@@ -78,6 +78,8 @@ sub_domain = "test.zzzzz.com"
 get_ip_from_url= "https://api-ipv4.ip.sb/ip"
 ```
 
+you should add an `A` record in your domain Control,first
+
 ## deploy
 
 1. copy compiled binary into `/jffs/scripts/` and  rename it to `ddns-start`  run
