@@ -26,9 +26,10 @@ jobs:
       run: |
         cd src
         go mod download -x
+        go mod vendor
 
     - name: Build
-      run: go build -v .
+      run: GOOS=linux GOARCH=arm go build mod=vendor -v .
 
     - name: Test
       run: go test -v .
