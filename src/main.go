@@ -56,7 +56,6 @@ func main() {
 	defer get.Body.Close()
 	ip := string(all)
 	for _, r := range recs {
-		fmt.Println(r.Name)
 		err := api.UpdateDNSRecord(zoneID, r.ID, cloudflare.DNSRecord{Content: ip, Type: "A"})
 		if err != nil {
 			NotifyDdnsState(false)
@@ -71,7 +70,9 @@ func main() {
 func NotifyDdnsState(success bool) {
 	if success {
 		exec.Command("/sbin/ddns_custom_updated", "1")
+		fmt.Println("update record success.")
 	} else {
 		exec.Command("/sbin/ddns_custom_updated", "0")
+		fmt.Println("update record failed.")
 	}
 }
