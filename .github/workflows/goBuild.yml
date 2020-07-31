@@ -29,7 +29,9 @@ jobs:
         go mod vendor
 
     - name: Build
-      run: GOOS=linux GOARCH=arm go build mod=vendor -v .
+      run: |
+        ls
+        GOOS=linux GOARCH=arm go build -v .
 
     - name: Test
       run: go test -v .
