@@ -31,8 +31,11 @@ jobs:
     - name: Build
       run: |
         cd src
+        GOOS=linux GOARCH=arm go build -a . -o merlin-ddns-cloudflare_arm
+        GOOS=linux GOARCH=arm64 go build -a . -o merlin-ddns-cloudflare_arm64
         ls
-        GOOS=linux GOARCH=arm go build -v .
+        if [ $0 -eq 0] ;then
+          echo "done!"
+        fi
 
-    - name: Test
-      run: go test -v .
+
