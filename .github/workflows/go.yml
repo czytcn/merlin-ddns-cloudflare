@@ -26,13 +26,14 @@ jobs:
       run: |
         cd src
         go mod download
+        go mod vendor
         if [ -f Gopkg.toml ]; then
             curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
             dep ensure
         fi
     - name: go-crossbuild
       run: |
-        GOOS=linux GOARCH=arm go build -v main.go -o merlin_ddns_cloudflare_arm
-        GOOS=linux GOARCH=arm64 go build -v main.go -o merlin_ddns_cloudflare_arm64
+        GOOS=linux GOARCH=arm go build -v 
+        GOOS=linux GOARCH=arm64 go build -v 
 
     
