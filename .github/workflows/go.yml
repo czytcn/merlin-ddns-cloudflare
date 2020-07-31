@@ -27,22 +27,8 @@ jobs:
         cd src
         go mod download
         go mod vendor
-        if [ -f Gopkg.toml ]; then
-            curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-            dep ensure
-        fi
     - name: go-cross-build
-      uses: thatisuday/go-cross-build@v1.1.0
-      with:
-        # Comma-separated list of "<kernel>/<arch>" combinations.
-        platforms: linux/arm,linux/arm64 # optional, default is linux/386,linux/amd64
-        # Package (directory) in the module to build. By default, builds the module directory.
-        package: merlin-ddns-cloudflare # optional, default is 
-        # Compress each build file inside a ".tar.gz" archive.
-        compress: true # optional, default is false
-        # Binary executable filename and filenames prefix for the build files.
-        name: merlin-ddns-cloudflare # optional, default is program
-        # Destination directory inside workspace to output build-artifacts.
-        dest: build # optional, default is build
-        # Flags to pass to the Go linker.
-        ldflags: "" # optional, default is 
+      run: |
+        export GOPATH = `pwd`:$GOPATH
+        GOOS=linux GOARCH=arm go build -v
+        
