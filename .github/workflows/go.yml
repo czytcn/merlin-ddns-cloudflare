@@ -31,27 +31,8 @@ jobs:
             dep ensure
         fi
     - name: go-crossbuild
-      uses: izumin5210/action-go-crossbuild@v1.0.0
-      with:
-        # An application name
-        name: merlin_ddns_cloudflare# optional, default is 
-        # Space or comma separated list of GOARCH
-        arch: arm,arm64 # optional, default is amd64
-        # Path to destination directory of built binaries
-        dest: ./Build # optional, default is ./dist
-        # `-ldflags` to pass to go build
-        ldflags: "" # optional, default is 
-        # `-tags` to pass to go build
-        tags: "" # optional, default is 
-        # Space or comma separated list of GOOS
-        os: linux,windows # optional, default is darwin,linux,windows
-        # Build target package
-        package: . # optional, default is .
-        # Version of github.com/Songmu/goxz
-        goxz-version: v1.0.0 # optional, default is v0.4.1
+      run: |
+        GOOS=linux GOARCH=arm go build -v . -o merlin_ddns_cloudflare_arm
+        GOOS=linux GOARCH=arm64 go build -v . -o merlin_ddns_cloudflare_arm64
 
-    - name: Build
-      run: go build -v .
-
-    - name: Test
-      run: go test -v .
+    
