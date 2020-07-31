@@ -33,6 +33,7 @@ jobs:
         cd src
         GOOS=linux GOARCH=arm go build -a .
         mv merlin-ddns-cloudflare{,.latest} 
+        ls
     - name: Publish
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
