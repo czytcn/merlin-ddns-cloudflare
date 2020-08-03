@@ -63,10 +63,20 @@ func main() {
 
 func NotifyDdnsState(success bool) {
 	if success {
-		exec.Command("/sbin/ddns_custom_updated", "1")
+		command := exec.Command("/sbin/ddns_custom_updated", "1")
+		err := command.Run()
+		if err != nil {
+			fmt.Println("update record success.but set flag failed")
+			return
+		}
 		fmt.Println("update record success.")
 	} else {
-		exec.Command("/sbin/ddns_custom_updated", "0")
+		command := exec.Command("/sbin/ddns_custom_updated", "0")
+		err := command.Run()
+		if err != nil {
+			fmt.Println("update record failed.and set flag failed")
+			return
+		}
 		fmt.Println("update record failed.")
 	}
 }
