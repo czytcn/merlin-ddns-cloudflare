@@ -93,3 +93,11 @@ you should add an `A` record in your domain Control,first
 2. login in your router web page
 
    Go to `Advanced Settings` > `WAN` > `DDNS` Set `Server` to `Custom`  and Click the `Apply` button
+   
+   ## referrence
+   
+   https://github.com/RMerl/asuswrt-merlin.ng/wiki/Custom-DDNS
+   
+   
+   
+   
