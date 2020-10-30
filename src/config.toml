@@ -5,4 +5,8 @@ domain = "zzzzz.com"
 sub_domain = "test.zzzzz.com"
 
 [app]
-get_ip_from_url= "https://api-ipv4.ip.sb/ip"
+update_ipv4_dns_record = true
+update_ipv6_dns_record = true
+enable_cloudflare_proxied = false
+ttl = 1
+send_ddns_custom_updated_notify =  false

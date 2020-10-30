@@ -3,7 +3,7 @@ package config
 import "github.com/BurntSushi/toml"
 
 var (
-	O Cfg
+	Obj Cfg
 )
 
 type Cfg struct {
@@ -12,7 +12,7 @@ type Cfg struct {
 }
 
 func LoadCfg(cfgFile string) error {
-	_, err := toml.DecodeFile(cfgFile, &O)
+	_, err := toml.DecodeFile(cfgFile, &Obj)
 	if err != nil {
 		return err
 	}
