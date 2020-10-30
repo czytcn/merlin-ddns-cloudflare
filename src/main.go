@@ -32,7 +32,7 @@ func main() {
 		return
 	}
 	// Fetch all records for a zone
-	recs, err := api.DNSRecords(zoneID, cloudflare.DNSRecord{Name: config.Obj.Api.SubDomain, Type: "A"})
+	recs, err := api.DNSRecords(zoneID, cloudflare.DNSRecord{Name: config.Obj.Api.SubDomain})
 	if err != nil {
 		NotifyDdnsState(false)
 		log.Fatal(err)
